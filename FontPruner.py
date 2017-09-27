@@ -43,7 +43,7 @@ def bulidNewFont(originPath,outPutPath):
       fontName = fontOrigin[-index:]
       print ("fontName" +fontName)
       fullPara = ""
-      fullPara += TempPathDefault+SepPath+IntermediateFolder+SepPath+ChineseOutPut+"  "+TempPathDefault+SepPath+IntermediateFolder+SepPath+UnChineseOutPut+" "+fontOrigin + " " + fullOutPut+SepPath+fontName 
+      fullPara += outPutPath+SepPath+IntermediateFolder+SepPath+ChineseOutPut+"  "+outPutPath+SepPath+IntermediateFolder+SepPath+UnChineseOutPut+" "+fontOrigin + " " + fullOutPut+SepPath+fontName 
       command ="java -jar bin"+SepPath+"sfnttool.jar -c " +fullPara
       
       if os.system(command) is not Succ:
