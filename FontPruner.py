@@ -67,9 +67,9 @@ if __name__ == '__main__':
   tmp = arguments['--tempPath']
   if tmp is None:
     tmp = TempPathDefault
-  else :
-      if not os.path.exists(tmp):
-        raise Exception("tempPath - bad path: " + tmp) 
+
+  if not os.path.exists(tmp):
+    os.makedirs(tmp)
 
   genFilePathList(arguments['--inputPath'], tmp) 
 
