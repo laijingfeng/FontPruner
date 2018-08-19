@@ -52,9 +52,22 @@ def bulidNewFont(originPath,outPutPath):
 
 
 if __name__ == '__main__':
-  arguments = docopt(__doc__, version='0.1.1rc')
-  print(arguments)
+  # arguments = docopt(__doc__, version='0.1.1rc')
+  # print(arguments)
         #raise Exception("path not exists")
+  
+  arguments = {}
+  arguments['--inputPath'] = ['input']
+  arguments['--inputFont'] = []
+  font_path = './'
+  list = os.listdir(font_path)
+  for line in list:
+    file_path = os.path.join(font_path, line)
+    if os.path.isdir(file_path):
+        continue
+    if line.find('.ttf') != -1:
+        arguments['--inputFont'].append(line)
+  arguments['--tempPath'] = 'output'
 
   for path in arguments['--inputPath']:
     if not os.path.exists(path):
@@ -76,7 +89,3 @@ if __name__ == '__main__':
   extractFileString(tmp)
   
   bulidNewFont(arguments['--inputFont'], tmp)
-
-  
-           
-    
