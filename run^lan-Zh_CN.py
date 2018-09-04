@@ -155,6 +155,9 @@ class MainClass(object):
         output_ttf_dir = os.path.join(self.get_exe_path('./'), './output/output/fonts/')
         JerryUtil.remove_file_or_dir(output_ttf_dir)
 
+        input_ttf_dir = os.path.join(self.get_exe_path('./'), './fonts/')
+        JerryUtil.remove_file_or_dir(input_ttf_dir)
+
     def work_init(self):
         """
         初始化
@@ -170,6 +173,8 @@ class MainClass(object):
         
         font_path_from = self.config['font_lib_dir'] + self.argv['lan'] + '/'
         font_path_to = os.path.join(self.get_exe_path('./'), './fonts/')
+        if os.path.exists(font_path_to) is False:
+            os.makedirs(font_path_to)
         font_list = os.listdir(font_path_from)
         for line in font_list:
             file_path = os.path.join(font_path_from, line)
