@@ -58,15 +58,17 @@ if __name__ == '__main__':
   
   arguments = {}
   arguments['--inputPath'] = ['input']
+
   arguments['--inputFont'] = []
-  font_path = './'
+  font_path = './fonts/'
   list = os.listdir(font_path)
   for line in list:
     file_path = os.path.join(font_path, line)
     if os.path.isdir(file_path):
         continue
     if line.find('.ttf') != -1:
-        arguments['--inputFont'].append(line)
+        arguments['--inputFont'].append(file_path)
+  
   arguments['--tempPath'] = 'output'
 
   for path in arguments['--inputPath']:
