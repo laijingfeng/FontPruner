@@ -1,8 +1,8 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-08-27 17:46:55
+# version: 2018-10-08 11:00:11
 """
-工具模板
+字库整理
 """
 
 import sys
@@ -149,39 +149,10 @@ class MainClass(object):
         """
         清理
         """
-        input_path = os.path.join(self.get_exe_path('./'), './input/localizelib_to_txt.txt')
-        JerryUtil.remove_file_or_dir(input_path)
-
         output_ttf_dir = os.path.join(self.get_exe_path('./'), './output/output/fonts/')
         JerryUtil.remove_file_or_dir(output_ttf_dir)
-
-        input_ttf_dir = os.path.join(self.get_exe_path('./'), './fonts/')
-        JerryUtil.remove_file_or_dir(input_ttf_dir)
-
-    def work_init(self):
-        """
-        初始化
-        """
-        output_ttf_dir = os.path.join(self.get_exe_path('./'), './output/output/fonts/')
         if os.path.exists(output_ttf_dir) is False:
             os.makedirs(output_ttf_dir)
-        
-        input_path_from = self.config['font_lib_dir'] + self.argv['lan'] + '/' + 'localizelib_to_txt.txt'
-        input_path_to = os.path.join(self.get_exe_path('./'), './input/localizelib_to_txt.txt')
-        if os.path.exists(input_path_from):
-            shutil.copy(input_path_from, input_path_to)
-        
-        font_path_from = self.config['font_lib_dir'] + self.argv['lan'] + '/'
-        font_path_to = os.path.join(self.get_exe_path('./'), './fonts/')
-        if os.path.exists(font_path_to) is False:
-            os.makedirs(font_path_to)
-        font_list = os.listdir(font_path_from)
-        for line in font_list:
-            file_path = os.path.join(font_path_from, line)
-            if os.path.isdir(file_path):
-                continue
-            if line.find('.ttf') != -1:
-                shutil.copy(file_path, font_path_to + line.replace(self.argv['lan'] + '^', self.argv['lan'] + '_')) 
     
     def work_doing(self):
         """
@@ -199,14 +170,13 @@ class MainClass(object):
             if os.path.isdir(file_path):
                 continue
             if line.find('.ttf') != -1:
-                shutil.copy(file_path, font_path_to + line.replace(self.argv['lan'] + '_', self.argv['lan'] + '^'))
+                shutil.copy(file_path, font_path_to + line)
 
     def work(self):
         """
         实际工作逻辑
         """
         self.work_clean()
-        self.work_init()
         self.work_doing()
         self.work_post()
 
