@@ -1,11 +1,11 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-06-23 15:58:35
+# version: 2018-11-13 15:32:00
 """
 Log模块
 """
 
-
+import sys
 import os
 import ctypes
 import shutil
@@ -43,14 +43,15 @@ class Logger(object):
     backgroundColor = [0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80\
     , 0x90, 0xa0, 0xb0, 0xc0, 0xd0, 0xe0, 0xf0]
 
-    def __init__(self, level=LEVEL_INFO, file_path='logger'):
+    def __init__(self, level=LEVEL_INFO, file_path='logger', to_screen=False):
         """
         初始化\n
         level -- 最低打印等级\n
         file_path -- 日志输出文件，不要后缀
         """
         self.__level__ = level
-        self.__out_file__ = 1  # 是否输出文件
+        self.__to_screen__ = to_screen  # 是否输出到屏幕，一般调试的时候需要
+        self.__to_file__ = True  # 是否输出文件
         self.__file_path__ = file_path
 
     def __set_cmd_color__(self, color):
@@ -76,22 +77,33 @@ class Logger(object):
         fore_color -- 字体颜色\n
         back_color -- 背景颜色
         """
-        self.__set_cmd_color__(self.foregroundColor[fore_color] | self.backgroundColor[back_color])
-        log_info = '{}|{}|{}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), level, content)
-        self.__set_cmd_default_color__()
+        try:
+            raise Exception
+        except:
+            # f_back两次得到logger之外的调用者
+            f = sys.exc_info()[2].tb_frame.f_back.f_back
+        caller_info = '{}|{}|Line.{}'.format(os.path.basename(f.f_code.co_filename), f.f_code.co_name, f.f_lineno)
 
-        if self.__out_file__ == 1:
+        log_info = '{}|{}|{}\n{}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), level, caller_info, content)
+        
+        if self.__to_screen__:
+            self.__set_cmd_color__(self.foregroundColor[fore_color] | self.backgroundColor[back_color])
+            print log_info
+            self.__set_cmd_default_color__()
+
+        if self.__to_file__ is True:
             with open('{}.log'.format(self.__file_path__), 'a') as file_handle:
                 file_handle.write('{}\n'.format(log_info))
 
-    def set_config(self, level=LEVEL_INFO, file_path='logger'):
+    def set_config(self, level=LEVEL_INFO, file_path='logger', to_screen=False):
         """
         设置\n
         level -- 最低打印等级\n
         file_path -- 日志输出文件，不要后缀
         """
         self.__level__ = level
-        self.__out_file__ = 1
+        self.__to_screen__ = to_screen
+        self.__to_file__ = True
         self.__file_path__ = file_path
 
     def reset(self):
