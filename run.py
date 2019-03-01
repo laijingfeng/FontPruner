@@ -37,12 +37,10 @@ class WorkClass(MainClass):
     
     def work_clean(self):
         """
-        清理
+        清理旧的输出字体
         """
-        output_ttf_dir = os.path.join(self.get_exe_path('./'), './output/output/fonts/')
-        JerryUtil.remove_file_or_dir(output_ttf_dir)
-        if os.path.exists(output_ttf_dir) is False:
-            os.makedirs(output_ttf_dir)
+        JerryUtil.delete_pattern_file(self.get_exe_path('./output/output/fonts/'), '.ttf')
+        JerryUtil.delete_pattern_file(self.get_exe_path('./output_final/'), '.ttf')
     
     def work_doing(self):
         """
@@ -53,16 +51,16 @@ class WorkClass(MainClass):
 
     def work_post(self):
         """
-        后续
+        转换后字体输出到output目录，内部层级较深，这里再把它们拷贝出来
         """
-        font_path_from = os.path.join(self.get_exe_path('./'), './output/output/fonts/')
-        font_path_to = os.path.join(self.get_exe_path('./'), './output_final/')
+        font_path_from = self.get_exe_path('./output/output/fonts/')
+        font_path_to = self.get_exe_path('./output_final/')
         font_list = os.listdir(font_path_from)
         for line in font_list:
             file_path = os.path.join(font_path_from, line)
             if os.path.isdir(file_path):
                 continue
-            if line.find('.ttf') != -1:
+            if line.endswith('.ttf'):
                 shutil.copy(file_path, font_path_to + line)
 
 if __name__ == '__main__':
