@@ -30,7 +30,9 @@ class WorkClass(MainClass):
         self.logger.info('==开始==')
 
         self.work_clean()
-        self.work_doing()
+        if self.work_doing() is False:
+            self.logger.info('==异常结束==')
+            return
         self.work_post()
 
         self.logger.info('==完成==')
@@ -46,8 +48,13 @@ class WorkClass(MainClass):
         """
         工作中
         """
-        args = ['python', 'FontPruner.py']
-        MainClass.execute_shell_command(args)
+        args = ['python', self.get_exe_path('./FontPruner.py')]
+        ret = MainClass.execute_shell_command(args)
+        if ret.returncode == 0:
+            return True
+        else:
+            self.logger.error('错误：' + str(ret.returncode) + ' ' + ret.stderr)
+            return False
 
     def work_post(self):
         """
